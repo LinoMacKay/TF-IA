@@ -33,9 +33,8 @@ export class PredictionComponent implements OnInit {
 
   submitForm() {
     if (
-      true
-      // this.predictorForm.valid &&
-      //this.symptomsService.getOnlySelected().length > 0
+      this.predictorForm.valid &&
+      this.symptomsService.getOnlySelected().length > 0
     ) {
       var toSend = {
         name: this.predictorForm.get('name')?.value,
