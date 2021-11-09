@@ -16,7 +16,7 @@ export class PredictionComponent implements OnInit {
     public dialog: MatDialog,
     private notificationService: NotificationService
   ) {}
-
+  isLoading = false;
   predictorForm = new FormGroup({});
   sintomas = this.symptomsService.symptoms;
   ngOnInit(): void {
@@ -36,12 +36,14 @@ export class PredictionComponent implements OnInit {
       this.predictorForm.valid &&
       this.symptomsService.getOnlySelected().length > 0
     ) {
+      this.isLoading = true;
       var toSend = {
         name: this.predictorForm.get('name')?.value,
         sintomas: this.symptomsService.getOnlySelected(),
       };
       this.openDialog(toSend);
       console.log(toSend);
+      this.isLoading = false;
     } else {
       this.notificationService.OpenSnackbar(
         'Por favor complete correctamente el formulario',
