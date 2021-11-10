@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/services/notification.service';
+import { PredictionService } from 'src/services/prediction.service';
 import { SymptomsService } from 'src/services/symptoms.service';
 import { ResultComponent } from '../result/result.component';
 
@@ -14,7 +15,8 @@ export class PredictionComponent implements OnInit {
   constructor(
     public symptomsService: SymptomsService,
     public dialog: MatDialog,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private predictionService: PredictionService
   ) {}
   isLoading = false;
   predictorForm = new FormGroup({});
@@ -41,9 +43,10 @@ export class PredictionComponent implements OnInit {
         name: this.predictorForm.get('name')?.value,
         sintomas: this.symptomsService.getOnlySelected(),
       };
-      this.openDialog(toSend);
-      console.log(toSend);
-      this.isLoading = false;
+      this.predictionService.createPrediction(toSend).subscribe((resp: any) => {
+        this.isLoading = false;
+        this.openDialog(resp);
+      });
     } else {
       this.notificationService.OpenSnackbar(
         'Por favor complete correctamente el formulario',
